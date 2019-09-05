@@ -21,7 +21,12 @@
    *
    * });
    *
-   * ...and/or other possibilities.
+   *<div id="app">
+   *	<input class="form-control" type="text" v-model="search" placeholder="Ex: Reforma" @click="buscar()">
+   *	<ul v-if="servicos">
+   *		<li v-for="(servico,i) in servicos" @click="selectOption(servico.title)">{{servico.title}}</li> 
+   *	</ul>
+   *</div>
    *
    * Ideally, it is not considered best practise to attach more than a
    * single DOM-ready or window-load handler for a particular page.
