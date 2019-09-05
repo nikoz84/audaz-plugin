@@ -2,35 +2,19 @@
 
 return [
     'servicos' => [
-        ['title' => 'CONSTRUÇÃO', 'options' => [
-            'has_project' => false,
-        ]],
-        ['title' => 'REFORMA', 'options' => [
-            'has_project' => false,
-        ]],
-        ['title' => 'PROJETOS', 'options' => [
-            'has_project' => false,
-        ]],
-        ['title' => 'PAINEL SOLAR', 'options' => [
-            'has_conta' => false,
-            'has_project' => false,
-
-        ]],
-        ['title' => 'AUTOMAÇÃO RESIDENCIAL', 'options' => [
-            'has_project' => false,
-        ]],
-        ['title' => 'INSPEÇÃO PREDIAL', 'options' => [
-            'has_project' => false,
-        ]],
-        ['title' => 'ORÇAMENTO E PLANEJAMENTO', 'options' => [
-            'has_project' => false,
-        ]]
+        ['id' => 1, 'title' => 'CONSTRUÇÃO', 'options' => []],
+        ['id' => 2, 'title' => 'REFORMA', 'options' => []],
+        ['id' => 3, 'title' => 'PROJETOS', 'options' => []],
+        ['id' => 4, 'title' => 'PAINEL SOLAR', 'options' => []],
+        ['id' => 5, 'title' => 'AUTOMAÇÃO RESIDENCIAL', 'options' => []],
+        ['id' => 6, 'title' => 'INSPEÇÃO PREDIAL', 'options' => []],
+        ['id' => 7, 'title' => 'ORÇAMENTO E PLANEJAMENTO', 'options' => []]
     ],
     'tipo_projeto' => [
-        'Arquitetura' => [],
-        'Fundação' => [],
-        'Estrutura' => ['Metálica', 'Concreto Armado'],
-        'Instalações' => [
+        ['name' => 'Arquitetura', 'types' => []],
+        ['name' => 'Fundação', 'types' => []],
+        ['name' => 'Estrutura', 'types' => ['Metálica', 'Concreto Armado']],
+        ['name' => 'Instalações', 'types' => [
             'Eléctricas',
             'Telefonia',
             'CFTV (Cámeras de Segurança)',
@@ -38,11 +22,11 @@ return [
             'Lógica',
             'Cerca Elétrica',
             'Hidrossanitárias'
-        ]
+        ]]
     ],
     'tipo_emprendimentos' => [
-        'Residencial' => ['Casa', 'Edificios', 'Quitinetes'],
-        'Comercial' => ['Empresarial', 'Ponto Comercial - Logas', 'Mall'],
-        'Outros' => []
+        ['name' => 'Residencial', 'types' => ['Casa', 'Edificios', 'Quitinetes']],
+        ['name' => 'Comercial', 'types' => ['Empresarial', 'Ponto Comercial - Logas', 'Mall']],
+        ['name' => 'Outros', 'types' => []]
     ]
 ];

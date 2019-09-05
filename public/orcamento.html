@@ -1,0 +1,57 @@
+<div id="app">
+  <div class="title-base  text-left" style="margin-bottom: 43px;">
+    <h2 style="margin-bottom: 0px;">{{ message }}</h2>
+  </div>
+
+  <input
+    class="form-control"
+    type="text"
+    v-model="search"
+    placeholder="Ex: Reforma"
+    @click="buscar()"
+  />
+  <ul class="list-group" v-if="servicos">
+    <li
+      class="list-group-item"
+      v-for="(servico,i) in servicos"
+      @click="selectOption(servico)"
+      style="padding-top:5px;"
+    >
+      {{ servico.title }}
+    </li>
+  </ul>
+  <div v-if="search">
+    Você possui um projeto? <span>Escolhido: {{ hasProject }}</span>
+    <br />
+    <input type="radio" id="one" value="Sim" v-model="hasProject" />
+    <label for="one">Sim</label>
+    <br />
+    <input type="radio" id="two" value="Não" v-model="hasProject" />
+    <label for="two">Não</label>
+  </div>
+
+  <!-- Button trigger modal -->
+  <button
+    type="button"
+    class="btn btn-primary btn-xs"
+    @click="showEmprendimentos = !showEmprendimentos"
+  >
+    Tipo De emprendimento
+  </button>
+  <ul class="list-group" v-if="showEmprendimentos">
+    <li
+      class="list-group-item"
+      v-for="(emprendimento, i) in emprendimentos"
+      @click="selectEmprendimento(emprendimento)"
+      style="padding-top:5px;"
+    >
+      <a @click="showEmprendimentosTypes = !showEmprendimentosTypes">{{
+        emprendimento.name
+      }}</a>
+
+      <a v-for="(item, index) in emprendimento.types" :key="index"
+        >{{ item }}
+      </a>
+    </li>
+  </ul>
+</div>

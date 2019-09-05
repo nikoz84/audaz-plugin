@@ -21,46 +21,69 @@
    *
    * });
    *
-   *<div id="app">
-   *	<input class="form-control" type="text" v-model="search" placeholder="Ex: Reforma" @click="buscar()">
-   *	<ul v-if="servicos">
-   *		<li v-for="(servico,i) in servicos" @click="selectOption(servico.title)">{{servico.title}}</li> 
-   *	</ul>
-   *</div>
+   
    *
    * Ideally, it is not considered best practise to attach more than a
    * single DOM-ready or window-load handler for a particular page.
    * Although scripts in the WordPress core, Plugins and Themes may be
    * practising this, we should strive to set a better example in our own work.
    */
-  
-  $( window ).load(function() {
+
+  $(window).load(function() {
     const app = new Vue({
       el: "#app",
       data: {
-		search: "",
-		servicos: [],
-		tipoProjetos: {},
-		tipoEmprendimentos: {}
-	  },
-	  methods: {
+        message: "DIGITE O SERVIÇO QUE ESTÁ PROCURANDO",
+        hasProject: null,
+        search: "",
+        showEmprendimentos: false,
+        showEmprendimentosTypes: false,
+        tipoEmprendimento: "",
+        tipoProjeto: "",
+        servicos: [],
+        projetos: {},
+        emprendimentos: {}
+      },
+      methods: {
         buscar() {
-		  let self = this;
-          $.ajax('/wp-json/api-v1/orcamento').then(resp => {
-			 self.servicos = resp.servicos;
-			 self.tipoProjetos = resp.tipo_projetos; 
-			 self.tipoEmprendimentos = resp.tipo_emprendimentos;
-		  })
-		},
-		selectOption(title){
-			this.search = title;
-			this.servicos = [];
-		}
-	  }
-	});
+          let self = this;
+          $.ajax("/wp-json/api-v1/orcamento").then(resp => {
+            self.servicos = resp.servicos;
+            self.projetos = resp.tipo_projetos;
+            self.emprendimentos = resp.tipo_emprendimentos;
+          });
+        },
+        selectOption(service) {
+          this.search = service.title;
+          this.servicos = [];
 
-	//app.hi();
+          switch (service.id) {
+            case 4:
+              this.message = "Você está com sua conta da luz?";
+
+              break;
+            default:
+              this.message = "Você possui projeto?";
+
+              break;
+          }
+        },
+        selectEmprendimento(data) {
+          console.log(data);
+        },
+        hasProject() {
+          //
+        },
+        sendEmail() {
+          let data = {
+            servico: this.search,
+            resposta: this.response
+          };
+          console.log(data);
+        }
+      }
+    });
+
+    //app.hi();
   });
 })(jQuery);
-
-
