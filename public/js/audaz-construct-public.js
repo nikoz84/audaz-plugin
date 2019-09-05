@@ -28,20 +28,34 @@
    * Although scripts in the WordPress core, Plugins and Themes may be
    * practising this, we should strive to set a better example in our own work.
    */
-  $(window).load(function() {
-    var app = new Vue({
-      el: "#vueApp",
+  
+  $( window ).load(function() {
+    const app = new Vue({
+      el: "#app",
       data: {
-        message: "Hello Vue!"
-      },
-      mounted() {
-        console.log(this.hi());
-      },
-      methods: {
-        hi: function() {
-          console.log("hola");
-        }
-      }
-    });
+		search: "",
+		servicos: [],
+		tipoProjetos: {},
+		tipoEmprendimentos: {}
+	  },
+	  methods: {
+        buscar() {
+		  let self = this;
+          $.ajax('/wp-json/api-v1/orcamento').then(resp => {
+			 self.servicos = resp.servicos;
+			 self.tipoProjetos = resp.tipo_projetos; 
+			 self.tipoEmprendimentos = resp.tipo_emprendimentos;
+		  })
+		},
+		selectOption(title){
+			this.search = title;
+			this.servicos = [];
+		}
+	  }
+	});
+
+	//app.hi();
   });
 })(jQuery);
+
+

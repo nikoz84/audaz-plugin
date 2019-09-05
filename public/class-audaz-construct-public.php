@@ -97,8 +97,10 @@ class Audaz_Construct_Public
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/audaz-construct-public.js', array('jquery'), $this->version, false);
+		wp_register_script('vue', plugin_dir_url(__FILE__) . 'js/vue.js');
+		wp_enqueue_script('vue');
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/audaz-construct-public.js', ['vue'], $this->version, true);
+		
 	}
 	/**
 	 * Adiciona Cors Header
@@ -125,8 +127,10 @@ class Audaz_Construct_Public
 		$response->set_status(200);
 		return $response;
 	}
-	public function add_div_vue_app()
+	public function add_div_vue_app($the_content)
 	{
-		echo "<div> hola MUNDO </div>";
+		$content = '<div id="app"></div>' . $the_content;
+
+		return $the_content;
 	}
 }

@@ -40,7 +40,7 @@ return [
             'Hidrossanitárias'
         ]
     ],
-    'tipo_emprendimento' => [
+    'tipo_emprendimentos' => [
         'Residencial' => ['Casa', 'Edificios', 'Quitinetes'],
         'Comercial' => ['Empresarial', 'Ponto Comercial - Logas', 'Mall'],
         'Outros' => []
