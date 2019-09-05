@@ -2,24 +2,15 @@
   <div class="title-base  text-left" style="margin-bottom: 43px;">
     <h2 style="margin-bottom: 0px;">{{ message }}</h2>
   </div>
-
-  <input
+  <select
+    v-if="servicos"
     class="form-control"
-    type="text"
     v-model="search"
-    placeholder="Ex: Reforma"
-    @click="buscar()"
-  />
-  <ul class="list-group" v-if="servicos">
-    <li
-      class="list-group-item"
-      v-for="(servico,i) in servicos"
-      @click="selectOption(servico)"
-      style="padding-top:5px;"
-    >
-      {{ servico.title }}
-    </li>
-  </ul>
+    @change="selectOption($event)"
+  >
+    <option v-for="(servico, i) in servicos">{{ servico.title }}</option>
+  </select>
+
   <div v-if="search">
     Você possui um projeto? <span>Escolhido: {{ hasProject }}</span>
     <br />

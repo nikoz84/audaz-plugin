@@ -33,7 +33,7 @@
     const app = new Vue({
       el: "#app",
       data: {
-        message: "DIGITE O SERVIÇO QUE ESTÁ PROCURANDO",
+        message: "QUAL SERVIÇO ESTÁ PROCURANDO?",
         hasProject: null,
         search: "",
         showEmprendimentos: false,
@@ -44,6 +44,9 @@
         projetos: {},
         emprendimentos: {}
       },
+      mounted() {
+        this.buscar();
+      },
       methods: {
         buscar() {
           let self = this;
@@ -53,31 +56,32 @@
             self.emprendimentos = resp.tipo_emprendimentos;
           });
         },
-        selectOption(service) {
-          this.search = service.title;
-          this.servicos = [];
-
+        selectOption(event) {
+          //this.search = service.title;
+          //this.servicos = [];
+          let el = event.target;
+          console.log(el);
+          /*
           switch (service.id) {
             case 4:
               this.message = "Você está com sua conta da luz?";
-
               break;
             default:
               this.message = "Você possui projeto?";
 
               break;
           }
+          */
         },
+
         selectEmprendimento(data) {
           console.log(data);
-        },
-        hasProject() {
-          //
         },
         sendEmail() {
           let data = {
             servico: this.search,
-            resposta: this.response
+            resposta: this.response,
+            possuiProjeto: this.hasProject
           };
           console.log(data);
         }
