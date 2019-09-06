@@ -8,21 +8,39 @@
     v-model="search"
     @change="selectOption($event)"
   >
-    <option v-for="(servico, i) in servicos">{{ servico.title }}</option>
+    <option v-for="(servico, i) in servicos" :id="servico.id">{{
+      servico.title
+    }}</option>
   </select>
 
-  <div v-if="search">
-    Você possui um projeto? <span>Escolhido: {{ hasProject }}</span>
+  <div class="hidden" id="has-project">
+    <input
+      type="radio"
+      id="has-project-input-sim"
+      value="Sim"
+      v-model="hasProject"
+      @click="hiddenHasProject($event)"
+    />
+    <label for="has-project-input-sim">Sim tenho projeto</label>
     <br />
-    <input type="radio" id="one" value="Sim" v-model="hasProject" />
-    <label for="one">Sim</label>
+    <input
+      type="radio"
+      id="has-project-input-nao"
+      value="Não"
+      v-model="hasProject"
+      @click="hiddenHasProject($event)"
+    />
+    <label for="has-project-input-nao">Não tenho Projeto</label>
     <br />
-    <input type="radio" id="two" value="Não" v-model="hasProject" />
-    <label for="two">Não</label>
+    <div v-show="hasProject == 'Sim'">
+      <input type="file" id="has-project-file" v-model="projectFile" />
+      <label for="has-project-file">Arquivo em formato excel</label>
+    </div>
   </div>
 
   <!-- Button trigger modal -->
   <button
+    v-show="hasProject == 'Não' || hasProject == ''"
     type="button"
     class="btn btn-primary btn-xs"
     @click="showEmprendimentos = !showEmprendimentos"
@@ -45,4 +63,12 @@
       </a>
     </li>
   </ul>
+
+  <button
+    class="btn btn-success btn-block"
+    type="submit"
+    @click.prevent="sendEmail()"
+  >
+    Enviar
+  </button>
 </div>

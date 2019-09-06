@@ -34,8 +34,9 @@
       el: "#app",
       data: {
         message: "QUAL SERVIÇO ESTÁ PROCURANDO?",
-        hasProject: null,
+        hasProject: "",
         search: "",
+        projectFile: "",
         showEmprendimentos: false,
         showEmprendimentosTypes: false,
         tipoEmprendimento: "",
@@ -60,20 +61,30 @@
           //this.search = service.title;
           //this.servicos = [];
           let el = event.target;
-          console.log(el);
-          /*
-          switch (service.id) {
+          el.classList.add("hidden");
+          let id = el.id;
+
+          switch (id) {
             case 4:
               this.message = "Você está com sua conta da luz?";
               break;
             default:
               this.message = "Você possui projeto?";
-
+              let project = document.getElementById("has-project");
+              project.classList.remove("hidden");
               break;
           }
-          */
         },
+        hiddenHasProject(event) {
+          let el = event.target;
+          if (el.value == "Sim") {
+            this.message = "Envie seu projeto";
+          } else {
+            this.message = "Quer contratar o projeto conosco?";
+          }
 
+          console.log(el.parentNode);
+        },
         selectEmprendimento(data) {
           console.log(data);
         },
@@ -81,13 +92,17 @@
           let data = {
             servico: this.search,
             resposta: this.response,
-            possuiProjeto: this.hasProject
+            possuiProjeto: this.hasProject,
+            arquivoProjeto: this.projectFile
           };
           console.log(data);
         }
       }
     });
 
-    //app.hi();
+    Vue.component("question", {
+      props: ["title"],
+      template: "<h3>{{ title }}</h3>"
+    });
   });
 })(jQuery);
