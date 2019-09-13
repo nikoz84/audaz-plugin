@@ -118,6 +118,20 @@ class Audaz_Construct_Public
 			'callback' => __CLASS__ . '::orcamento_api'
 		]);
 	}
+	public function add_route_send_mail()
+	{
+		register_rest_route('api-v1', '/orcamento', [
+			'methods' => WP_REST_Server::CREATABLE,
+			'callback' => __CLASS__ . '::send_email'
+		]);
+	}
+	function send_email(WP_REST_Request $request)
+	{
+		$data = $request->get_params();
+		$response = new WP_REST_Response($data);
+		$response->set_status(200);
+		return $response;
+	}	
 
 	function orcamento_api()
 	{

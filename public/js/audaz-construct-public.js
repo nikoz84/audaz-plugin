@@ -37,6 +37,7 @@
         hasProject: "",
         search: "",
         projectFile: "",
+        wishProject: "",
         showEmprendimentos: false,
         showEmprendimentosTypes: false,
         tipoEmprendimento: "",
@@ -77,13 +78,22 @@
         },
         hiddenHasProject(event) {
           let el = event.target;
-          if (el.value == "Sim") {
-            this.message = "Envie seu projeto";
-          } else {
-            this.message = "Quer contratar o projeto conosco?";
+          let message = el.dataset.message;
+          let answer = el.dataset.answer;
+          let value = el.value;
+          console.log(answer);
+          console.log(value);
+          this.message = message;
+          if (answer == "has-project") {
+            this.hasProject = value;
+          } else if (answer == "wish-project") {
+            this.hasProject = value;
           }
 
-          console.log(el.parentNode);
+          //el.classList.add("hidden");
+          let parent = el.parentNode;
+          console.log(parent);
+          parent.classList.add("hidden");
         },
         selectEmprendimento(data) {
           console.log(data);
