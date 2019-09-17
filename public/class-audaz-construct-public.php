@@ -74,8 +74,8 @@ class Audaz_Construct_Public
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
-		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/audaz-construct-public.css', array(), $this->version, 'all');
+		//wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/app.3984a265.css', array(), $this->version, 'all');
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'dist/css/app.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -97,9 +97,11 @@ class Audaz_Construct_Public
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		wp_register_script('vue', plugin_dir_url(__FILE__) . 'js/vue.js');
-		wp_enqueue_script('vue');
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/audaz-construct-public.js', ['vue'], $this->version, true);
+		$public = plugin_dir_url(__FILE__);
+		wp_register_script('vendor', $public . 'dist/js/chunk-vendors.js', '', '', true);
+		wp_enqueue_script('vendor');
+		wp_enqueue_script($this->plugin_name, $public . 'dist/js/app.js', ['vendor'], $this->version, true);
+		//wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/audaz-construct-public.js', ['jquery'], $this->version, true);
 		
 	}
 	/**
@@ -125,15 +127,56 @@ class Audaz_Construct_Public
 			'callback' => __CLASS__ . '::send_email'
 		]);
 	}
-	function send_email(WP_REST_Request $request)
+	static function send_email( WP_REST_Request $request )
 	{
 		$data = $request->get_params();
-		$response = new WP_REST_Response($data);
-		$response->set_status(200);
-		return $response;
-	}	
 
-	function orcamento_api()
+		$attachments = $data['arquivo_projeto'] ? $data['arquivo_projeto'] : [];
+		$reply_to = $data['email'];
+		$headers = "Content-Type: text/html; charset=UTF-8; Reply-To: {$reply_to}";
+		$body = self::html_email($data);
+		$subject = 'Novo orçamento enviado.';
+		$send_to = get_option('admin_email');
+		
+		$email_response = wp_mail($send_to, $subject, $body, $headers, $attachments);
+
+		if($email_response){
+			$response = new WP_REST_Response(
+				[
+					'message' => 'E-mail enviado com sucesso!',
+					'success' => true
+				]);
+			$response->set_status(200);
+			return $response;
+		}
+		
+	}	
+	static function html_email($data)
+	{
+		$servico = $data['servico'];
+		$tipo_projeto = $data['tipo_projeto'];
+		$tipo_emprendimento = $data['tipo_emprendimento'];
+        $possui_projeto = $data['possui_projeto'];
+        $deseja_contratar = $data['deseja_contratar'];
+        $nome =  $data['nome'];
+        $email = $data['email'];
+		$telefone = $data['telefone'];
+		$site_name = get_option( 'blogname' );
+		$body = "<div>
+				<h3>Orçamneto enviado desde {$site_name}</h3>
+				<p><strong>Serviço:</strong> {$servico} </p><br/>
+				<p><strong>Tipo de Projeto:</strong> {$tipo_projeto}</p><br/>
+				<p><strong>Possui Projeto:</strong> {$possui_projeto} </p><br/>
+				<p><strong>Deseja Contratar Conosco:</strong> {$deseja_contratar} </p><br/>
+				<p><strong>Tipo Emprendimento:</strong> {$tipo_emprendimento} </p><br/>
+				<h3>Dados Pessoais</h3>
+				<p><strong>Nome:</strong> {$nome} </p><br/>
+				<p><strong>E-mail:</strong> {$email}</p><br/>
+				<p><strong>Telefone:</strong>{$telefone}</p><br/>
+			</div>";
+		return $body;
+	}
+	static function orcamento_api()
 	{
 		$data = include(AUDAZ_PLUGIN_PATH . '/includes/configs.php');
 
