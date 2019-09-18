@@ -75,7 +75,7 @@ class Audaz_Construct_Public
 		 * class.
 		 */
 		//wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/app.3984a265.css', array(), $this->version, 'all');
-		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'dist/css/app.css', array(), $this->version, 'all');
+		//wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'dist/css/app.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -98,10 +98,10 @@ class Audaz_Construct_Public
 		 * class.
 		 */
 		$public = plugin_dir_url(__FILE__);
-		wp_register_script('vendor', $public . 'dist/js/chunk-vendors.js', '', '', true);
-		wp_enqueue_script('vendor');
-		wp_enqueue_script($this->plugin_name, $public . 'dist/js/app.js', ['vendor'], $this->version, true);
-		//wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/audaz-construct-public.js', ['jquery'], $this->version, true);
+		//wp_register_script('vendor', $public . 'dist/js/chunk-vendors.js', '', '', true);
+		//wp_enqueue_script('vendor');
+		//wp_enqueue_script($this->plugin_name, $public . 'dist/app.js', ['vendor'], $this->version, true);
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'dist/app.js', '', $this->version, true);
 		
 	}
 	/**

@@ -1,14 +1,30 @@
 <template>
   <div class="row">
     <section class="col-sm-6">
-      
-    <div v-if="!showDadosPessoais">
     <!-- SERVICOS-->
     <select v-if="servicos" class="form-control" v-model="servico" @change="selectOption($event)">
-      <option value="">Escolha Um Serviço</option>
-      <option v-for='(servico, i) in servicos' :id='servico.id' :key="i" v-text="servico.title"></option>
+      <option value="0">Escolha Um Serviço</option>
+      <option v-for="(servico, i) in servicos" :value="`${servico.id}`" :key="i" v-text="servico.title"></option>
     </select>
-    <!-- TIPO EMPRENDIMENTO -->
+
+    <p v-if="hasQuestion"> {{ question }} 
+        <strong 
+          class="text-danger" 
+          style="cursor:pointer;" 
+          @click="response(1)">
+          NÃO
+        </strong> |
+        <strong 
+          class="text-info" 
+          style="cursor:pointer;color:#31708f !important;" 
+          @click="response(0)">
+          SIM
+        </strong> 
+    </p>
+<!-- TIPO EMPRENDIMENTO
+    <div v-if="!showDadosPessoais">
+    
+     
     <div v-show="servico">
       <p>Escolha o tipo de Projeto</p>
       <ul class="list-unstyled list-inline">
@@ -69,19 +85,20 @@
         <p v-show="email"><strong>E-mail:</strong> {{email}}</p>
         <p v-show="telefone"><strong>Telefone:</strong>{{ telefone }}</p> 
       </div>
+      -->
     </section>
   </div>
 </template>
 
 <script>
-import Childs from "./Childs.vue";
+//import Childs from "./Childs.vue";
 
 export default {
   name: "Orcamento",
-  components: { Childs },
+  //components: { Childs },
   data() {
     return {
-      servico: "",
+      servico: "0",
       possuiProjeto: "",
       tipoEmprendimento: "",
       tipoProjeto: "",
@@ -97,7 +114,9 @@ export default {
       nome: "",
       email: "",
       telefone: "",
-      showDadosPessoais: false
+      showDadosPessoais: false,
+      hasQuestion: false,
+      question: ""
     };
   },
   mounted() {
@@ -112,9 +131,40 @@ export default {
         self.tiposEmprendimentos = resp.data.tipo_emprendimentos;
       });
     },
+    makeQuestion(){
+
+    },
     selectOption(e) {
       let el = e.target;
-      el.classList.add("hidden");
+      //el.classList.add("hidden");
+      let id = el.value;
+      //console.log(id);
+      switch (true) {
+        case id == 1:
+          
+          console.log(id)
+          break;
+        case id == 2:
+          console.log(id)
+          break;
+        case id == 3:
+          console.log(id)
+          break; 
+        case id == 4:
+          console.log(id)
+          break;
+        case id == 5:
+          console.log(id)
+          break;
+        case id == 6:
+          console.log(id)
+          break;
+        case id == 7:
+          console.log(id)
+          break; 
+        default:
+          break;
+      }
     },
     selectEmprendimento(emp) {
       if (emp.types.length) {
