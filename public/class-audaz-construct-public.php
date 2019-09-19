@@ -102,7 +102,6 @@ class Audaz_Construct_Public
 		//wp_enqueue_script('vendor');
 		//wp_enqueue_script($this->plugin_name, $public . 'dist/app.js', ['vendor'], $this->version, true);
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'dist/app.js', '', $this->version, true);
-		
 	}
 	/**
 	 * Adiciona Cors Header
@@ -127,41 +126,59 @@ class Audaz_Construct_Public
 			'callback' => __CLASS__ . '::send_email'
 		]);
 	}
-	static function send_email( WP_REST_Request $request )
+	static function send_email(WP_REST_Request $request)
 	{
 		$data = $request->get_params();
+		$file = $request->get_file_params();
+		$attachments = null;
 
-		$attachments = $data['arquivo_projeto'] ? $data['arquivo_projeto'] : [];
+		if (count($file) > 0) {
+			$attachments = self::saveFile($file['file']);
+		}
+		print_r($attachments);
+		die();
 		$reply_to = $data['email'];
 		$headers = "Content-Type: text/html; charset=UTF-8; Reply-To: {$reply_to}";
 		$body = self::html_email($data);
 		$subject = 'Novo orçamento enviado.';
 		$send_to = get_option('admin_email');
-		
+
 		$email_response = wp_mail($send_to, $subject, $body, $headers, $attachments);
 
-		if($email_response){
+		if ($email_response) {
 			$response = new WP_REST_Response(
 				[
 					'message' => 'E-mail enviado com sucesso!',
 					'success' => true
-				]);
+				]
+			);
 			$response->set_status(200);
 			return $response;
 		}
-		
-	}	
+	}
+	static function saveFile($file)
+	{
+
+		$deprecated = null;
+		$bits = $file['tmp_name'];
+		$time = current_time('mysql');
+		$upload = wp_upload_bits($file['name'], $deprecated, $bits, $time);
+
+		return [
+			$upload['url']
+		];
+	}
 	static function html_email($data)
 	{
 		$servico = $data['servico'];
 		$tipo_projeto = $data['tipo_projeto'];
 		$tipo_emprendimento = $data['tipo_emprendimento'];
-        $possui_projeto = $data['possui_projeto'];
-        $deseja_contratar = $data['deseja_contratar'];
-        $nome =  $data['nome'];
-        $email = $data['email'];
+		$possui_projeto = $data['possui_projeto'];
+		$deseja_contratar = $data['deseja_contratar'];
+		$nome =  $data['nome'];
+		$email = $data['email'];
 		$telefone = $data['telefone'];
-		$site_name = get_option( 'blogname' );
+		$site_name = get_option('blogname');
 		$body = "<div>
 				<h3>Orçamneto enviado desde {$site_name}</h3>
 				<p><strong>Serviço:</strong> {$servico} </p><br/>
