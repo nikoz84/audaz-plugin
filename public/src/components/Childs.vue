@@ -1,7 +1,7 @@
 <template>
     <div>
-        <ul class="list-unstyled" v-for="(item, i) in childs" :key="i" >
-            <li @click="selectChild(item, $event)">
+        <ul class="list-unstyled"  >
+            <li v-for="(item, i) in childs" :key="i" @click="selectChild(item, $event)">
                 <a class="label label-primary" >{{item}} </a>
             </li>
         </ul>
