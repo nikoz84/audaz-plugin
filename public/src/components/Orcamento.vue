@@ -1,84 +1,86 @@
 <template>
   <div class="row" style="word-break: break-word;">
     <section class="col-sm-6">
-    <!-- SERVICOS-->
-    <select v-if="servicos" class="form-control" v-model="servico" @change="selectOption($event)">
-      <option value="0">Escolha Um Serviço</option>''
-      <option v-for="(servico, i) in servicos" :value="`${servico.id}`" :id="`ser-${servico.id}`" :key="i" v-text="servico.title"></option>
-    </select>
-    <!-- PROJETO -->
-    <div v-if="hasQuestion" style="padding-top:10px;">
-      <p> {{ question }} 
-      <toggle-button 
-         :value="true"
-          color="#82C7EB"
-          :sync="false"
-          v-model="possuiProjeto"
-         @change="onChangeHasProject" 
-         :labels="{checked: 'Sim', unchecked: 'Não'}" 
-         style="margin-left: 20px" />
-      </p>
-      <div v-show="possuiProjeto == true" >
-        <input type="file" id="has-project-file" @change="onFileChange($event, 'projeto')" />
-        <label for="has-project-file">Envie o projeto em formato excel</label>
-      </div>
-    </div>
-    <!-- DESEJA CONTRATAR -->
-    <div v-show="showDesejaContratar">
-      <p> Deseja contratar o serviço de projeto conosco? 
+    <div v-show="!showDadosPessoais">  
+      <!-- SERVICOS-->
+      <select v-if="servicos" class="form-control" v-model="servico" @change="selectOption($event)">
+        <option value="0">Escolha Um Serviço</option>''
+        <option v-for="(servico, i) in servicos" :value="`${servico.id}`" :id="`ser-${servico.id}`" :key="i" v-text="servico.title"></option>
+      </select>
+      <!-- PROJETO -->
+      <div v-if="hasQuestion" style="padding-top:10px;">
+        <p> {{ question }} 
         <toggle-button 
-         :value="true"
-          color="#82C7EB"
-          :sync="false"
-          v-model="desejaContratar"
-         @change="onChangeDesejaContratar" 
-         :labels="{checked: 'Sim', unchecked: 'Não'}" 
-         style="margin-left: 20px" />
-      </p>
-    </div>  
-    <!-- CONTA -->
-    <div v-if="hasConta" style="padding-top:10px;">
-      <p> {{ questionConta }} 
-      <toggle-button 
-         :value="false"
-          color="#82C7EB"
-          :sync="true"
-          v-model="possuiConta"
-         @change="onChangeHasConta" 
-         :labels="{checked: 'Sim', unchecked: 'Não'}" 
-         style="margin-left: 20px" />
-      </p>
-      <div v-show="possuiConta == true">
-        <input type="file" id="has-project-file" @change="onFileChange($event, 'conta')" />
-        <label for="has-project-file">Envie sua conta de energia</label>
+          :value="true"
+            color="#82C7EB"
+            :sync="false"
+            v-model="possuiProjeto"
+          @change="onChangeHasProject" 
+          :labels="{checked: 'Sim', unchecked: 'Não'}" 
+          style="margin-left: 20px" />
+        </p>
+        <div v-show="possuiProjeto == true" >
+          <input type="file" id="has-project-file" @change="onFileChange($event, 'projeto')" />
+          <label for="has-project-file">Envie o projeto em formato excel</label>
+        </div>
       </div>
-    </div>
-    <!-- TIPO PROJETO -->
-    <div v-show="showTipoProjeto">
-      <p>Escolha o tipo de Projeto</p>
-      <ul class="list-unstyled list-inline">
-        <li v-for='(projeto, i) in tiposProjetos' :key="`c-${i}`" @click="selectProjeto(projeto, false)">
-          <a class="label label-default" style="cursor:pointer;" v-text="projeto.name"></a>
-        </li>
-      </ul>
-      <Childs v-if="showChilds" :childs="childs"></Childs>
-    </div>
-    
-    <!-- TIPO EMPRENDIMENTO -->
-    <div v-if="showTipoEmprendimentos" id="emprendimentos" style="padding-top:10px;">
-      <p>Escolha o tipo de Emprendimento</p>
-      <ul class="list-unstyled list-inline">
-        <li v-for='(emprendimento, i) in tiposEmprendimentos' :key="`c-${i}`" @click="selectEmprendimento(emprendimento)">
-          <a class="label label-default" style="cursor:pointer;" v-text="emprendimento.name"></a>
-        </li>
-      </ul>
-      <div v-if="childsEmp">
+      <!-- DESEJA CONTRATAR -->
+      <div v-show="showDesejaContratar">
+        <p> Deseja contratar o serviço de projeto conosco? 
+          <toggle-button 
+          :value="true"
+            color="#82C7EB"
+            :sync="false"
+            v-model="desejaContratar"
+          @change="onChangeDesejaContratar" 
+          :labels="{checked: 'Sim', unchecked: 'Não'}" 
+          style="margin-left: 20px" />
+        </p>
+      </div>  
+      <!-- CONTA -->
+      <div v-if="hasConta" style="padding-top:10px;">
+        <p> {{ questionConta }} 
+        <toggle-button 
+          :value="false"
+            color="#82C7EB"
+            :sync="true"
+            v-model="possuiConta"
+          @change="onChangeHasConta" 
+          :labels="{checked: 'Sim', unchecked: 'Não'}" 
+          style="margin-left: 20px" />
+        </p>
+        <div v-show="possuiConta == true">
+          <input type="file" id="has-project-file" @change="onFileChange($event, 'conta')" />
+          <label for="has-project-file">Envie sua conta de energia</label>
+        </div>
+      </div>
+      <!-- TIPO PROJETO -->
+      <div v-show="showTipoProjeto">
+        <p>Escolha o tipo de Projeto</p>
         <ul class="list-unstyled list-inline">
-          <li v-for="(echild, e) in childsEmp" :key="`echild-${e}`" @click="addEmpChild(echild, $event)">
-            <a class="label label-primary" style="cursor:pointer;" v-text="echild"></a>
+          <li v-for='(projeto, i) in tiposProjetos' :key="`c-${i}`" @click="selectProjeto(projeto, false)">
+            <a class="label label-default" style="cursor:pointer;" v-text="projeto.name"></a>
           </li>
         </ul>
-        
+        <Childs v-if="showChilds" :childs="childs"></Childs>
+      </div>
+      
+      <!-- TIPO EMPRENDIMENTO -->
+      <div v-if="showTipoEmprendimentos" id="emprendimentos" style="padding-top:10px;">
+        <p>Escolha o tipo de Emprendimento</p>
+        <ul class="list-unstyled list-inline">
+          <li v-for='(emprendimento, i) in tiposEmprendimentos' :key="`c-${i}`" @click="selectEmprendimento(emprendimento)">
+            <a class="label label-default" style="cursor:pointer;" v-text="emprendimento.name"></a>
+          </li>
+        </ul>
+        <div v-if="childsEmp">
+          <ul class="list-unstyled list-inline">
+            <li v-for="(echild, e) in childsEmp" :key="`echild-${e}`" @click="addEmpChild(echild, $event)">
+              <a class="label label-primary" style="cursor:pointer;" v-text="echild"></a>
+            </li>
+          </ul>
+          
+        </div>
       </div>
     </div>
     <div v-if="showDadosPessoais" style="padding-top:10px;">
@@ -245,6 +247,14 @@ export default {
 
           break;
         default:
+          this.hasQuestion = false;
+          this.hasConta = false;
+          this.showDadosPessoais = false;
+          this.showDesejaContratar = false;
+          this.nome = "";
+          this.email = "";
+          this.telefone = "";
+          this.question = "";
           break;
       }
     },
