@@ -2,8 +2,9 @@ import Vue from "vue";
 import App from "./App.vue";
 import axios from "axios";
 
+// http://audaz.des/wp-json/api-v1/
 let instance = axios.create({
-  baseURL: "http://audaz.des/wp-json/api-v1/"
+  baseURL: "http://audazengenharia.com.br/wp-json/api-v1/"
 });
 Vue.use(instance);
 Vue.config.productionTip = false;
